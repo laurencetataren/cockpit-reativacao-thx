@@ -430,7 +430,7 @@
 </div>
 
 <!-- ============================
-     TAB: OBJEÇÕES
+     TAB: OBJEÇ��ES
 ============================= -->
 <div id="section-objecoes" class="tab-section hidden">
     <p class="text-slate-400 text-sm mb-4">Clique na objeção para ver a resposta pronta:</p>
@@ -646,7 +646,7 @@
                         <div class="text-cyan-400 font-bold text-xs uppercase mb-2">💼 LinkedIn</div>
                         <ul class="text-slate-300 text-xs space-y-1.5">
                             <li>• Página da empresa — cresceu ou encolheu?</li>
-                            <li>• Buscar: Gerente Logística, Coord. Supply Chain, Comprador, Dir. Operações</li>
+                            <li>• Buscar: vicente Lofística, Coord. Supply Chain, Comprador, Dir. Operações</li>
                             <li>• Verificar se o contato antigo ainda está lá</li>
                             <li>• Conexões em comum com o time THX?</li>
                         </ul>
@@ -783,7 +783,7 @@ const SCRIPTS = {
     retomada: {
         icon: '🔄', title: 'Retomada', sub: 'Já falou antes',
         main: 'Abertura:',
-        mainText: '"[NOME], bom dia! Aqui é [FARMER] da THX Group. A gente conversou [semana passada / há alguns dias] e eu queria dar continuidade."',
+        mainText: '"[NOME], bom dia! Aqui é [FARMER] da THX Group. A gente conversou [semana passada / h� alguns dias] e eu queria dar continuidade."',
         tip: 'Não repita o pitch de apresentação. Você já se apresentou. Foco total em agendar a reunião.',
         subs: [
             { label: '↳ Se o decisor abrir espaço', text: '"Queria entender melhor a operação de vocês. O Laurence, nosso CEO, está pessoalmente envolvido nessa retomada de clientes e ele mesmo faz a primeira reunião. Você teria 30 minutos essa semana ou na próxima?"' },
@@ -804,10 +804,10 @@ const SCRIPTS = {
         fechamento: false
     },
     caixa_postal: {
-        icon: '📬', title: 'Caixa Postal', sub: 'Não atendeu',
+        icon: '🐬', title: 'Caixa Postal', sub: 'Não atendeu',
         main: 'Recado de voz:',
         mainText: '"[NOME], boa tarde. Aqui é [FARMER] da THX Group. Tentei falar com você hoje sobre a parceria que vocês tinham com a THX. Quando tiver um momento, pode me retornar no [TELEFONE]? Obrigada."',
-        tip: 'Curto e objetivo. Não vende nada. Só pede o retorno. Máximo 2 vezes durante a cadência.',
+         tip: 'Curto e objetivo. Não vende nada. Só pede o retorno. Máximo 2 vezes durante a cadência.',
         subs: [],
         fechamento: false
     }
@@ -850,11 +850,11 @@ Abraços,
 [FARMER] | THX Group | [TELEFONE]`
     },
     ec: {
-  2     title: 'Cenário C — Falou, reunião não agendada',
+        title: 'Cenário C — Falou, reunião não agendada',
         subject: 'THX Group x [EMPRESA] — Obrigada pelo contato',
         body: `[NOME], boa tarde.
 
-Obrigada por ter atendido minha ligação hoje. Foi um prazer falar com você.
+Obrigada por ser atendido minha ligação hoje. Foi um prazer falar com você.
 
 Quero deixar alguns pontos que acho que vão fazer diferença na sua avaliação:
 
@@ -868,13 +868,13 @@ Abraços,
 [FARMER] | THX Group | [TELEFONE]`
     },
     ef1: {
-   �0   title: 'Follow-up 1 — Contexto adicional',
+        title: 'Follow-up 1 — Contexto adicional',
         subject: 'RE: THX Logtech',
         body: `[NOME], boa tarde.
 
 Quero te dar mais contexto para você avaliar se faz sentido a gente conversar.
 
-Nos últimos anos a THX se tornou referência em redução de custo logístico para médias e grandes empresas. Alguns dos nossos clientes reduziram entre 12% e 18% do custo por km após migrar para a THX, com melhora no OTIF e rastreamento em tempo real de toda a operação.
+Nos ultimos anos a THX see tornou referência em redução de custo logístico para médias e grandes empresas. Alguns dos nossos clientes reduziram entre 12% e 18% do custo por km após migrar para a THX, com melhora no OTIF e rastreamento em tempo real de toda a operação.
 
 Atendemos hoje empresas como Coca-Cola, Mercado Livre, WEG, Ambev e FEMSA. O que desenvolvemos com essas grandes operações é exatamente o que queremos levar para vocês.
 
@@ -914,7 +914,8 @@ const LINKEDIN = {
     },
     li3: {
         title: 'Passo 3 — Conteúdo de Valor',
-        tip: 'Use dado do setor: custo do diesel, tabela Ai esse conteúdo aqui e lembrei da nossa conexão. Acho que pode ser relevante para quem trabalha com logística. [LINK DO ARTIGO / CASE THX]. Qualquer dúvida sobre o assunto, pode me chamar.'
+        tip: 'Use dado do setor: custo do diesel, tabela ANTT, tendência de last mile. Ou um case da THX.',
+        body: '[NOME], vi esse conteúdo aqui e lembrei da nossa conexão. Acho que pode ser relevante para quem trabalha com logística. [LINK DO ARTIGO / CASE THX]. Qualquer dúvida sobre o assunto, pode me chamar.'
     },
     li4: {
         title: 'Passo 4 — Abordagem Direta',
@@ -924,12 +925,12 @@ const LINKEDIN = {
 };
 
 const CADENCIA = {
-    1:  { title: 'Dia 1 — Primeira Ligação', actions: '📞 Ligar para o decisor (ou recepcionista)', script: 'Use o script correto conforme quem atendeu. Registrar resultado no Pipedrive imediatapt correto conforme quem atendeu. Registrar resultado no Pipedrive imediatamente após.' },
+    1:  { title: 'Dia 1 — Primeira Ligação', actions: '📞 Ligar para o decisor ou recepcionista)', script: 'Use o script correto conforme quem atendeu. Registrar resultado no Pipedrive imediatammente após.' },
     3:  { title: 'Dia 3 — Segunda tentativa', actions: '📞 2ª ligação + ✉️ Email Cenário A', script: 'Tente em horário diferente do Dia 1. Envie o Email A logo após a ligação.' },
     5:  { title: 'Dia 5 — Terceira tentativa', actions: '📞 3ª ligação', script: 'Se já tem o nome: use Recepcionista com nome. Se já falou: use Retomada.' },
     7:  { title: 'Dia 7 — Quarta tentativa', actions: '📞 4ª ligação + ✉️ Follow-up 1', script: 'Envie o Follow-up 1 para dar mais contexto. Verifique se aceitou conexão no LinkedIn.' },
     10: { title: 'Dia 10 — Quinta tentativa', actions: '📞 5ª ligação + 🔗 LinkedIn (Passo 3 ou 4)', script: 'LinkedIn entra agora se ainda não conseguiu falar. Use Abordagem Direta (Passo 4) se teve 2+ ligações sem sucesso.' },
-    14: { title: 'Dia 14 — Sexta tentativa', actions: '📞 6ª ligação + ✉️ Follow-up 2 (opcional)', script: 'Penúltima tentativa. Se houve qualquer abertura, seja mais insistente aqui.' },
+    14: { title: 'Dia 14 — Sexta tentativa', actions: '📞 5ª ligação + ✉️ Follow-up 2 (opcional)', script: 'Penúltima tentativa. Se houve qualquer abertura, seja mais insistente aqui.' },
     20: { title: 'Dia 20 — Ligação de Despedida', actions: '📞 7ª e última ligação', script: 'Use o script de DESPEDIDA. Após isso: Descartado no Pipedrive com motivo "sem resposta após 7 tentativas".' }
 };
 
@@ -1118,7 +1119,7 @@ const OBJ_CALL = {
     oj2:  { title: '⏰ Não é o momento', text: '"Entendo. E sabe, é exatamente quando não tem urgência que vale a conversa — porque aí você avalia com calma, sem pressão. Os clientes que melhor aproveitam a parceria com a THX Group são os que chegaram antes de precisar. Posso só entrar no seu radar agora, sem compromisso nenhum, para que quando surgir uma necessidade você já saiba com quem falar? São 30 minutos com o Laurence essa semana."' },
     oj3:  { title: '📧 Me manda um email', text: '"Com certeza! Vou te mandar hoje um email com alguns cases bem detalhados de boas práticas que temos aqui — com certeza vão ser úteis para a realidade de vocês. E já aproveito para combinar: posso te ligar daqui três dias para a gente conversar depois que você tiver visto o material? Aí a conversa já fica muito mais rica."' },
     oj4:  { title: '💰 Preço caro', text: '"Entendo. Tem uma coisa que o nosso CEO sempre fala: antes de ter um diferencial competitivo, a gente precisa ser competitivo. O frete é caro para quem paga e pouco para quem recebe — e a gente aprendeu a encontrar esse equilíbrio. Justamente pelo perfil de clientes que a THX Group atende, onde o frete é muito espremido, a gente desenvolveu uma eficiência muito grande usando tecnologia para conseguir chegar num valor bem agressivo. Posso marcar 30 minutos com o Laurence para a gente fazer essa análise junto com os números de vocês?"' },
-    oj5:  { title: '❓ Não lembro de vocês', text: '"Faz todo sentido não lembrar — faz um bom tempo que a gente trabalhou juntos. Vocés estão numa lista de clientes que a THX Group tem um objetivo muito grande de reativar — porque muita coisa foi construída nesse tempo em que a nossa parceria ficou pausada, e a gente quer muito mostrar isso. Faz sentido marcar 30 minutos para o Laurence, nosso CEO, apresentar pessoalmente o que mudou?"' },
+    oj5:  { title: '❓ Não lembro de vocês', text: '"Faz todo sentido não lembrar — faz um bom tempo que a gente trabalhou juntos. Vocês estão numa lista de clientes que a THX Group tem um objetivo muito grande de reativar — porque muita coisa foi construída nesse tempo em que a nossa parceria ficou pausada, e a gente quer muito mostrar isso. Faz sentido marcar 30 minutos para o Laurence, nosso CEO, apresentar pessoalmente o que mudou?"' },
     oj6:  { title: '🚫 Não tenho interesse', text: '"Tudo bem, respeito. Só queria deixar uma porta aberta: se um dia surgir uma necessidade de transporte que o fornecedor atual não consiga atender na velocidade ou na região que vocês precisam, pode contar com a THX Group. Posso pelo menos entrar na lista de cotação de vocês para esses momentos?"' },
     oj7:  { title: '🔄 Tive problema antes', text: '"Obrigada por falar isso diretamente, porque é exatamente o que o Laurence precisa ouvir. Ele está conduzindo pessoalmente essa retomada de clientes e quer saber o que aconteceu em cada caso. Não para se justificar — para mostrar o que mudou na operação desde então. Empresas como Coca-Cola e Mercado Livre também exigiram que a gente provasse antes de fechar. Você toparia dar essa chance? 30 minutos com o CEO pessoalmente."' },
     oj8:  { title: '👤 Quem decide não sou eu', text: '"Entendo! Mas me fala uma coisa — você é impactado pelo transporte no seu dia a dia de trabalho? Se for, talvez você seja exatamente a pessoa mais indicada para essa primeira conversa. A ideia não é falar de contrato agora, é entender quais são as dores do seu dia a dia e ver como a THX Group pode tornar o seu trabalho mais leve. Se fizer sentido, num segundo momento a gente envolve quem decide. O que você acha?"' },
@@ -1248,7 +1249,7 @@ function toggleTimer() {
         timerInt = setInterval(() => {
             timerSecs++;
             const m = String(Math.floor(timerSecs/60)).padStart(2,'0');
-            const s = String(timerSecs%60).padStart(2,'0');
+            const s = String(timerSecs%60).padStart*2,'0');
             document.getElementById('timerDisplay').textContent = `${m}:${s}`;
         }, 1000);
     }
