@@ -430,7 +430,7 @@
 </div>
 
 <!-- ============================
-     TAB: OBJEÇ��ES
+     TAB: OBJEÇÕES
 ============================= -->
 <div id="section-objecoes" class="tab-section hidden">
     <p class="text-slate-400 text-sm mb-4">Clique na objeção para ver a resposta pronta:</p>
@@ -466,7 +466,7 @@
             <div class="obj-body hidden px-4 pb-4 anim">
                 <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
                     <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
-                    "Entendo. E sabe, é exatamente quando não tem urgência que vale a conversa — porque aí você avalia com calma, sem pressão. Os clientes que melhor aproveitam a parceria com a THX Group são os que chegaram antes de precisar. Posso só entrar no seu radar agora, sem compromisso nenhum, para que quando surgir uma necessidade você já saiba com quem falar? São 30 minutos com o Laurence essa semana."
+                    "Entendo. E sabe, é exatamente quando não tem urgência que vale a conversa — porque aí vocà avalia com calma, sem pressão. Os clientes que melhor aproveitam a parceria com a THX Group são os que chegaram antes de precisar. Posso só entrar no seu radar agora, sem compromisso nenhum, para que quando surgir uma necessidade você já saiba com quem falar? São 30 minutos com o Laurence essa semana."
                 </div>
             </div>
         </div>
@@ -551,102 +551,99 @@
             <div class="obj-body hidden px-4 pb-4 anim">
                 <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
                     <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
-                    "Obrigada por falar isso diretamente, porque é exatamente o que o Laurence precisa ouvir. Ele está conduzindo pessoalmente essa retomada de clientes e quer saber o que aconteceu em cada caso. Não para se justificar — para mostrar o que mudou na operação desde então. Empresas como Coca-Cola e Mercado Livre também exigiram que a gente provasse antes de fechar. Você toparia dar essa chance? 30 minutos com o CEO pessoalmente."
+                    "Obrigada por falar isso diretamente, porque é exatamente o que o Laurence precisa ouvir. Ele está conduzindo pessoalmente essa retomada de clientes e quer saber o que aconteceu em cada caso. Não para se justificar — para mostrar o que mudou na operação desde então. Empresas como Coca-Cola e Mercado Livre também exigiram que a gente provasse antes de fechar. Você toparia dar essa chance? 30 minutos com o CE="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Analista de Logística</span>
+                            <span class="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Gestor de Transportes</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-700 rounded-xl p-3">
+                        <div class="text-purple-400 font-bold text-xs uppercase mb-2">Como encontrar</div>
+                        <ul class="text-slate-300 text-xs space-y-1.5">
+                            <li>• LinkedIn: buscar na página da empresa por cargo</li>
+                            <li>• Site: seção "Equipe" ou "Sobre"</li>
+                            <li>• Google: "[empresa] + gerente logística"</li>
+                            <li>• Recepção: ligar e perguntar diretamente</li>
+                        </ul>
+                        <div class="mt-2 bg-amber-950/50 border border-amber-800/30 rounded-lg px-3 py-1.5 text-amber-200 text-xs">
+                            💡 Ter o nome antes de ligar aumenta 3x a chance de passar pela recepção
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
-             onclick="toggleObj(this)">
+        <!-- Checklist da ficha -->
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleMapear('map-ficha', this)">
             <div class="px-4 py-3.5 flex items-center justify-between gap-3">
                 <div class="flex items-center gap-3">
-                    <span class="text-xl shrink-0">👤</span>
-                    <span class="font-semibold text-white text-sm">"Quem decide isso não sou eu"</span>
+                    <span class="text-2xl shrink-0">✅</span>
+                    <div>
+                        <div class="font-bold text-white text-sm">1.3 — Checklist antes de ligar</div>
+                        <div class="text-slate-400 text-xs mt-0.5">Todos marcados? Pode ligar!</div>
+                    </div>
                 </div>
-                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+                <span class="text-slate-400 text-sm shrink-0 map-arrow">▼</span>
             </div>
-            <div class="obj-body hidden px-4 pb-4 anim">
-                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
-                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
-                    "Entendo! Mas me fala uma coisa — você é impactado pelo transporte no seu dia a dia de trabalho? Se for, talvez você seja exatamente a pessoa mais indicada para essa primeira conversa. A ideia não é falar de contrato agora, é entender quais são as dores do seu dia a dia e ver como a THX Group pode tornar o seu trabalho mais leve. Se fizer sentido, num segundo momento a gente envolve quem decide. O que você acha?"
+            <div id="map-ficha" class="hidden px-4 pb-4 anim">
+                <div class="grid sm:grid-cols-2 gap-2 mt-1" id="checklist-items">
+                    <!-- Gerado por JS -->
                 </div>
-            </div>
-        </div>
-
-        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
-             onclick="toggleObj(this)">
-            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <span class="text-xl shrink-0">🔒</span>
-                    <span class="font-semibold text-white text-sm">"Temos contrato fechado com outro fornecedor"</span>
-                </div>
-                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
-            </div>
-            <div class="obj-body hidden px-4 pb-4 anim">
-                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
-                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
-                    "Faz sentido. E não estou propondo que vocês quebrem nada. O que quero é que a THX Group esteja na lista quando vocês abrirem o próximo bid. Empresas do porte de vocês geralmente têm esse ciclo de concorrência — quando costuma ser a próxima janela de abertura? Quero estar posicionado antes disso acontecer."
-                </div>
-            </div>
-        </div>
-
-        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
-             onclick="toggleObj(this)">
-            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <span class="text-xl shrink-0">📉</span>
-                    <span class="font-semibold text-white text-sm">"Estamos diminuindo volume / em reestruturação"</span>
-                </div>
-                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
-            </div>
-            <div class="obj-body hidden px-4 pb-4 anim">
-                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
-                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
-                    "Esse é exatamente o momento onde a escolha do parceiro de transporte importa mais. Quando o volume cai, o custo logístico por unidade sobe — e quem tem um fornecedor com tecnologia de roteirização e consolidação de carga consegue proteger margem mesmo com menos volume. É o que a THX faz com vários clientes em período de ajuste. Vale uma conversa de 30 minutos para entender se tem sinergia?"
-                </div>
+                <button onclick="resetChecklist()" class="mt-3 text-xs text-slate-500 hover:text-slate-300 underline">Reiniciar checklist</button>
             </div>
         </div>
 
     </div>
 </div>
 
+</main>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 right-4 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-xl text-sm font-bold hidden z-50 anim">✓ Copiado!</div>
+
 <!-- ============================
-     TAB: MAPEAR
+     SCRIPTS
 ============================= -->
-<div id="section-mapear" class="tab-section hidden">
-    <p class="text-slate-400 text-sm mb-4">Use antes de ligar. <strong class="text-red-400">Regra de ouro:</strong> se não sabe o nome, cargo e o que a empresa faz hoje, você NÃO está pronta para ligar.</p>
-
-    <div class="space-y-4">
-
-        <!-- Pesquisa Empresa -->
-        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
-             onclick="toggleMapear('map-empresa', this)">
-            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
-                <div class="flex items-center gap-3">
-                    <span class="text-2xl shrink-0">🏢</span>
-                    <div>
-                        <div class="font-bold text-white text-sm">1.1 — Pesquisa da Empresa</div>
-                        <div class="text-slate-400 text-xs mt-0.5">Ela ainda existe e faz sentido?</div>
-                    </div>
-                </div>
-                <span class="text-slate-400 text-sm shrink-0 map-arrow">▼</span>
-            </div>
-            <div id="map-empresa" class="hidden px-4 pb-4 anim">
-                <div class="grid sm:grid-cols-3 gap-3 mt-1">
-                    <div class="bg-slate-700 rounded-xl p-3">
-                        <div class="text-blue-400 font-bold text-xs uppercase mb-2">🔍 Google</div>
-                        <ul class="text-slate-300 text-xs space-y-1.5">
-                            <li>• Buscar "[nome da empresa]" — site ativo? Notícias recentes?</li>
-                            <li>• "[empresa] + logística" ou "+ transporte"</li>
-                            <li>• "[empresa] + vagas" — se contrata para logística, área está crescendo</li>
-                            <li>• Google Maps — ainda no mesmo endereço?</li>
-                        </ul>
-                    </div>
-                    <div class="bg-slate-700 rounded-xl p-3">
-                        <div class="text-cyan-400 font-bold text-xs uppercase mb-2">💼 LinkedIn</div>
+<script>
+// =========================================
+// DATA
+// =========================================
+const SCRIPTS = {
+    recep_sem_nome: {
+        icon: '📞', title: 'Recepcionista', sub: 'Sem nome do contato',
+        main: 'Abertura:',
+        mainText: '"Bom dia! Meu nome é [FARMER], sou da THX Group. Tudo bem? Preciso tirar uma dúvida sobre um transporte — gostaria de falar com a pessoa responsável pela área de logística ou transporte de vocês. Seria possível me transferir?"',
+        tip: 'Objetivo: sair com o NOME do decisor. Seja cordial, não vá direto ao ponto.',
+        subs: [
+            { label: '↳ Se transferir direto', text: 'Use o script "Decisor atendeu — 1ª conversa". Clique no card acima.' },
+            { label: '↳ Se perguntar o assunto', text: '"Claro! É para tirar algumas dúvidas sobre os carregamentos de vocês."' },
+            { label: '↳ Se perguntar qual empresa', text: '"Sou da THX Group, empresa de logística. Pode me passar o nome e o contato de quem cuida disso hoje?"' },
+        ],
+        fechamento: false
+    },
+    recep_com_nome: {
+        icon: '📋', title: 'Recepcionista', sub: 'Com nome do contato',
+        main: 'Abertura:',
+        mainText: '"Bom dia! Gostaria de falar com o [NOME], por favor. Me pediram para retornar."',
+        tip: '"Me pediram para retornar" funciona melhor do que "quero vender algo". Seja natural.',
+        subs: [
+            { label: '↳ Se disser que a pessoa saiu', text: '"Entendi. Pode me passar alguém da logística de vocês, responsável pelos carregamentos? Preciso de uma informação sobre uma carga."' },
+            { label: '↳ Se perguntar quem está ligando', text: '"É [FARMER] da THX Group. Já tive contato com [NOME] anteriormente."' },
+            { label: '↳ Se disser que está ocupado', text: '"Sem problema! Quando seria melhor eu retornar — amanhã de manhã ou à tarde?"' },
+        ],
+        fechamento: false
+    },
+    decisor_primeira: {
+        icon: '🎯', title: 'Decisor atendeu', sub: '1ª conversa',
+        main: 'Abertura (20 segundos):',
+        mainText: '"[NOME], boa tarde! Meu nome é [FARMER], da THX Group. A [EMPRESA] já operou com a gente no passado e de lá pra cá a THX se transformou muito. A gente se tornou uma empresa muito tecnológica e hoje atende Coca-Cola, Mercado Livre, WEG. Nosso objetivo é levar essa mesma metodologia de distribuição que a gente usa com essas grandes empresas para outras empresas que querem esse nível de excelência. Queria entender rapidamente como está a logística de vocês hoje. São 4 perguntas bem rápidas."',
+        tip: 'Você tem 20 segundos para gerar interesse. Use o NOME da pessoa. Seja direta.',
+        subs: [
+            { label: '📋 4 Perguntas de Qualificação', text: '1. "Qual o maior desafio de vocês com transporte hoje?"\n2. "Quais são as principais rotas que vocês operam?"\n3. "Quantas cargas dedicadas vocês carregam por mês, aproximadamente?"\n4. "Vocês trabalham com tabela de fornecedor fixa ou é cotação carga a carga?"' },
+            { label: '↳ Se não puder falar agora', text: '"Sem problema nenhum. Quando seria melhor — amanhã às 10h ou às 14h?" (Sempre oferecer opções. Registrar no Pipedrive imediatamente.)' },
+            { lxs uppercase mb-2">💼 LinkedIn</div>
                         <ul class="text-slate-300 text-xs space-y-1.5">
                             <li>• Página da empresa — cresceu ou encolheu?</li>
-                            <li>• Buscar: vicente Lofística, Coord. Supply Chain, Comprador, Dir. Operações</li>
+                            <li>• Buscar: Gerente Logística, Coord. Supply Chain, Comprador, Dir. Operações</li>
                             <li>• Verificar se o contato antigo ainda está lá</li>
                             <li>• Conexões em comum com o time THX?</li>
                         </ul>
@@ -783,7 +780,7 @@ const SCRIPTS = {
     retomada: {
         icon: '🔄', title: 'Retomada', sub: 'Já falou antes',
         main: 'Abertura:',
-        mainText: '"[NOME], bom dia! Aqui é [FARMER] da THX Group. A gente conversou [semana passada / h� alguns dias] e eu queria dar continuidade."',
+        mainText: '"[NOME], bom dia! Aqui é [FARMER] da THX Group. A gente conversou [semana passada / há alguns dias] e eu queria dar continuidade."',
         tip: 'Não repita o pitch de apresentação. Você já se apresentou. Foco total em agendar a reunião.',
         subs: [
             { label: '↳ Se o decisor abrir espaço', text: '"Queria entender melhor a operação de vocês. O Laurence, nosso CEO, está pessoalmente envolvido nessa retomada de clientes e ele mesmo faz a primeira reunião. Você teria 30 minutos essa semana ou na próxima?"' },
@@ -804,10 +801,10 @@ const SCRIPTS = {
         fechamento: false
     },
     caixa_postal: {
-        icon: '🐬', title: 'Caixa Postal', sub: 'Não atendeu',
+        icon: '📬', title: 'Caixa Postal', sub: 'Não atendeu',
         main: 'Recado de voz:',
         mainText: '"[NOME], boa tarde. Aqui é [FARMER] da THX Group. Tentei falar com você hoje sobre a parceria que vocês tinham com a THX. Quando tiver um momento, pode me retornar no [TELEFONE]? Obrigada."',
-         tip: 'Curto e objetivo. Não vende nada. Só pede o retorno. Máximo 2 vezes durante a cadência.',
+        tip: 'Curto e objetivo. Não vende nada. Só pede o retorno. Máximo 2 vezes durante a cadência.',
         subs: [],
         fechamento: false
     }
@@ -819,7 +816,7 @@ const EMAILS = {
         subject: 'Operação de transporte — [EMPRESA]',
         body: `[NOME], boa tarde.
 
-Meu nome é [FARMER], sou da THX Group. Tentei falar com você por telefone hoje e me passaram seu contato.
+Meu nome é [FARMER], sou da THX Group. Tentei falar com vocà por telefone hoje e me passaram seu contato.
 
 A [EMPRESA] já operou com a gente no passado e eu queria muito retomar essa conversa. A THX evoluiu muito desde a última vez que trabalhamos juntos. Nos tornamos uma empresa extremamente tecnológica e hoje atendemos empresas como Coca-Cola, Mercado Livre, WEG, Ambev e FEMSA. Nosso objetivo é levar essa mesma metodologia de distribuição que usamos com essas grandes referências para outras empresas que buscam excelência logística.
 
@@ -835,7 +832,7 @@ Abraços,
         subject: 'Reunião confirmada — THX Group x [EMPRESA]',
         body: `[NOME], boa tarde.
 
-Foi um prazer falar com você hoje. Muito obrigada por abrir esse espaço para a gente se reconectar.
+Foi um prazer falar com vocà hoje. Muito obrigada por abrir esse espaço para a gente se reconectar.
 
 Segue a confirmação do que combinamos:
 Data: [DIA]
@@ -854,7 +851,7 @@ Abraços,
         subject: 'THX Group x [EMPRESA] — Obrigada pelo contato',
         body: `[NOME], boa tarde.
 
-Obrigada por ser atendido minha ligação hoje. Foi um prazer falar com você.
+Obrigada por ter atendido minha ligação hoje. Foi um prazer falar com você.
 
 Quero deixar alguns pontos que acho que vão fazer diferença na sua avaliação:
 
@@ -874,7 +871,7 @@ Abraços,
 
 Quero te dar mais contexto para você avaliar se faz sentido a gente conversar.
 
-Nos ultimos anos a THX see tornou referência em redução de custo logístico para médias e grandes empresas. Alguns dos nossos clientes reduziram entre 12% e 18% do custo por km após migrar para a THX, com melhora no OTIF e rastreamento em tempo real de toda a operação.
+Nos últimos anos a THX se tornou referência em redução de custo logístico para médias e grandes empresas. Alguns dos nossos clientes reduziram entre 12% e 18% do custo por km após migrar para a THX, com melhora no OTIF e rastreamento em tempo real de toda a operação.
 
 Atendemos hoje empresas como Coca-Cola, Mercado Livre, WEG, Ambev e FEMSA. O que desenvolvemos com essas grandes operações é exatamente o que queremos levar para vocês.
 
@@ -925,12 +922,12 @@ const LINKEDIN = {
 };
 
 const CADENCIA = {
-    1:  { title: 'Dia 1 — Primeira Ligação', actions: '📞 Ligar para o decisor ou recepcionista)', script: 'Use o script correto conforme quem atendeu. Registrar resultado no Pipedrive imediatammente após.' },
-    3:  { title: 'Dia 3 — Segunda tentativa', actions: '📞 2ª ligação + ✉️ Email Cenário A', script: 'Tente em horário diferente do Dia 1. Envie o Email A logo após a ligação.' },
+    1:  { title: 'Dia 1 — Primeira Ligação', actions: '📞 Ligar para o decisor (ou recepcionista)', script: 'Use o script correto conforme quem atendeu. Registrar resultado no Pipedrive imediatamente após.' },
+    3:  { title: 'Dia 3 — Segunda tentativa', actions: '📞 `ª ligação + ✉️ Email Cenário A', script: 'Tente em horário diferente do Dia 1. Envie o Email A logo após a ligação.' },
     5:  { title: 'Dia 5 — Terceira tentativa', actions: '📞 3ª ligação', script: 'Se já tem o nome: use Recepcionista com nome. Se já falou: use Retomada.' },
     7:  { title: 'Dia 7 — Quarta tentativa', actions: '📞 4ª ligação + ✉️ Follow-up 1', script: 'Envie o Follow-up 1 para dar mais contexto. Verifique se aceitou conexão no LinkedIn.' },
     10: { title: 'Dia 10 — Quinta tentativa', actions: '📞 5ª ligação + 🔗 LinkedIn (Passo 3 ou 4)', script: 'LinkedIn entra agora se ainda não conseguiu falar. Use Abordagem Direta (Passo 4) se teve 2+ ligações sem sucesso.' },
-    14: { title: 'Dia 14 — Sexta tentativa', actions: '📞 5ª ligação + ✉️ Follow-up 2 (opcional)', script: 'Penúltima tentativa. Se houve qualquer abertura, seja mais insistente aqui.' },
+    14: { title: 'Dia 14 — Sexta tentativa', actions: '📞 6ª ligação + ✉️ Follow-up 2 (opcional)', script: 'Penúltima tentativa. Se houve qualquer abertura, seja mais insistente aqui.' },
     20: { title: 'Dia 20 — Ligação de Despedida', actions: '📞 7ª e última ligação', script: 'Use o script de DESPEDIDA. Após isso: Descartado no Pipedrive com motivo "sem resposta após 7 tentativas".' }
 };
 
@@ -1249,7 +1246,7 @@ function toggleTimer() {
         timerInt = setInterval(() => {
             timerSecs++;
             const m = String(Math.floor(timerSecs/60)).padStart(2,'0');
-            const s = String(timerSecs%60).padStart*2,'0');
+            const s = String(timerSecs%60).padStart(2,'0');
             document.getElementById('timerDisplay').textContent = `${m}:${s}`;
         }, 1000);
     }
