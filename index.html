@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cockpit de Reativação — THX Group</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --red: #DC2626; }
+
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+
+        .situation-card {
+            transition: all 0.18s ease;
+            cursor: pointer;
+        }
+        .situation-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(220,38,38,0.18);
+        }
+        .situation-card.active {
+            border-color: #DC2626 !important;
+            background: rgba(220,38,38,0.06);
+        }
+
+        .tab-btn { border-bottom: 2px solid transparent; transition: all 0.15s; }
+        .tab-btn.active { border-bottom-color: #DC2626; color: #f87171; }
+
+        .script-box {
+            background: linear-gradient(135deg, rgba(220,38,38,0.08), rgba(220,38,38,0.03));
+            border-left: 3px solid #DC2626;
+        }
+
+        .sub-card { transition: all 0.15s; cursor: pointer; }
+        .sub-card:hover { background: rgba(220,38,38,0.06); }
+        .sub-card.open { border-left-color: #DC2626 !important; }
+
+        .obj-card { cursor: pointer; transition: border-color 0.15s; }
+        .obj-card.open { border-color: #DC2626 !important; }
+
+        .copy-btn { transition: all 0.15s; }
+        .copy-btn:hover { transform: scale(1.04); }
+
+        @keyframes fadeSlide {
+            from { opacity: 0; transform: translateY(6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .anim { animation: fadeSlide 0.2s ease-out; }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #DC2626; border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+
+<!-- ============================
+     HEADER
+============================= -->
+<header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-50 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="bg-red-600 text-white font-black text-xl px-3 py-1 rounded-lg tracking-wider">THX</div>
+            <div>
+                <div class="font-bold text-white leading-tight">Cockpit de Reativação</div>
+                <div class="text-xs text-slate-400">Carteira Fria — Tayná &amp; Gabrieli</div>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="hidden sm:flex items-center gap-2 bg-slate-700 rounded-lg px-3 py-1.5">
+                <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">CALL</span>
+                <span class="text-white font-mono font-bold text-sm" id="timerDisplay">00:00</span>
+            </div>
+            <button onclick="toggleTimer()" id="timerBtn"
+                class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition">
+                INICIAR CALL
+            </button>
+        </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="max-w-6xl mx-auto px-4 flex gap-0 overflow-x-auto">
+        <button onclick="showTab('ligacao')"  id="tab-ligacao"    class="tab-btn active    text-red-400  text-xs sm:text-sm font-bold px-4 py-2.5 whitespace-nowrap">📞 LIGAÇÃO</button>
+        <button onclick="showTab('email')"    id="tab-email"      class="tab-btn text-slate-400 text-xs sm:text-sm font-bold px-4 py-2.5 whitespace-nowrap hover:text-white">✉️ E-MAIL</button>
+        <button onclick="showTab('linkedin')" id="tab-linkedin"   class="tab-btn text-slate-400 text-xs sm:text-sm font-bold px-4 py-2.5 whitespace-nowrap hover:text-white">🔗 LINKEDIN</button>
+        <button onclick="showTab('cadencia')" id="tab-cadencia"   class="tab-btn text-slate-400 text-xs sm:text-sm font-bold px-4 py-2.5 whitespace-nowrap hover:text-white">📅 CADÊNCIA</button>
+        <button onclick="showTab('objecoes')" id="tab-objecoes"   class="tab-btn text-slate-400 text-xs sm:text-sm font-bold px-4 py-2.5 whitespace-nowrap hover:text-white">🛡️ OBJEÇÕES</button>
+        <button onclick="showTab('mapear')"   id="tab-mapear"     class="tab-btn text-slate-400 text-xs sm:text-sm font-bold px-4 py-2.5 whitespace-nowrap hover:text-white">🔍 MAPEAR</button>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto px-4 py-6">
+
+<!-- ============================
+     TAB: LIGAÇÃO
+============================= -->
+<div id="section-ligacao" class="tab-section">
+    <p class="text-slate-400 text-sm mb-4">Selecione a situação atual da ligação:</p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
+
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectScript('recep_sem_nome', this)">
+            <div class="text-2xl mb-2">📞</div>
+            <div class="font-bold text-white text-sm">Recepcionista</div>
+            <div class="text-amber-400 text-xs font-semibold mt-0.5">Sem nome</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Descobrir quem decide</div>
+        </div>
+
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectScript('recep_com_nome', this)">
+            <div class="text-2xl mb-2">📋</div>
+            <div class="font-bold text-white text-sm">Recepcionista</div>
+            <div class="text-blue-400 text-xs font-semibold mt-0.5">Com nome</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Pedir transferência</div>
+        </div>
+
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectScript('decisor_primeira', this)">
+            <div class="text-2xl mb-2">🎯</div>
+            <div class="font-bold text-white text-sm">Decisor atendeu</div>
+            <div class="text-green-400 text-xs font-semibold mt-0.5">1ª conversa</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Pitch + qualificação</div>
+        </div>
+
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectScript('retomada', this)">
+            <div class="text-2xl mb-2">🔄</div>
+            <div class="font-bold text-white text-sm">Retomada</div>
+            <div class="text-purple-400 text-xs font-semibold mt-0.5">Já falou antes</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Continuar conversa</div>
+        </div>
+
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectScript('despedida', this)">
+            <div class="text-2xl mb-2">🚪</div>
+            <div class="font-bold text-white text-sm">Despedida</div>
+            <div class="text-red-400 text-xs font-semibold mt-0.5">Última tentativa</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Criar urgência</div>
+        </div>
+
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectScript('caixa_postal', this)">
+            <div class="text-2xl mb-2">📬</div>
+            <div class="font-bold text-white text-sm">Caixa postal</div>
+            <div class="text-slate-400 text-xs font-semibold mt-0.5">Não atendeu</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Recado objetivo</div>
+        </div>
+
+    </div>
+
+    <!-- Painel do Script -->
+    <div id="script-panel" class="hidden anim">
+        <div class="bg-slate-800 rounded-2xl border border-slate-600 overflow-hidden">
+            <div class="bg-slate-700 px-5 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span id="sp-icon" class="text-xl"></span>
+                    <div>
+                        <span id="sp-title" class="font-bold text-white text-sm"></span>
+                        <span id="sp-sub"   class="text-slate-400 text-xs ml-2"></span>
+                    </div>
+                </div>
+                <button onclick="closeScript()" class="text-slate-400 hover:text-white text-lg leading-none">✕</button>
+            </div>
+
+            <div class="p-4 sm:p-5">
+                <!-- Script principal -->
+                <div id="sp-main"></div>
+                <!-- Dica -->
+                <div id="sp-tip" class="hidden bg-amber-950/40 border border-amber-800/30 rounded-xl px-4 py-2.5 mb-4 flex items-start gap-2">
+                    <span class="text-amber-400 mt-0.5 shrink-0">💡</span>
+                    <span id="sp-tip-text" class="text-amber-200 text-xs leading-relaxed"></span>
+                </div>
+                <!-- Sub-situações -->
+                <div id="sp-subs"></div>
+            </div>
+        </div>
+
+        <!-- Fechamento fixo (só aparece no Decisor 1ª vez) -->
+        <div id="fechamento-box" class="hidden mt-3 bg-red-950/50 border border-red-800/40 rounded-xl p-4 anim">
+            <div class="flex items-start gap-3">
+                <span class="text-red-400 text-xl shrink-0">🏆</span>
+                <div>
+                    <div class="text-red-400 font-bold text-xs uppercase tracking-wide mb-1.5">Fechamento — Usar sempre</div>
+                    <p class="text-slate-200 text-sm italic leading-relaxed">
+                        "Muito bom, [NOME]. Olha, a reativação de clientes antigos é uma prioridade da THX nesse momento. O próprio Laurence, nosso CEO, está pessoalmente envolvido nesse processo. Para qualquer cliente que estiver aberto a reconectar, ele mesmo faz questão de fazer a reunião de mapeamento. Posso agendar um horário para vocês conversarem?"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== OBJEÇÕES RÁPIDAS — sempre visível na aba Ligação ===== -->
+    <div class="mt-5" id="obj-call-panel">
+        <div class="flex items-center gap-3 mb-3">
+            <span class="text-xs text-slate-500 uppercase tracking-widest font-bold shrink-0">🛡️ Objeções durante a call</span>
+            <div class="flex-1 h-px bg-slate-700"></div>
+        </div>
+
+        <div class="flex flex-wrap gap-2" id="obj-call-buttons">
+            <button onclick="selectObjCall('oj1',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Já temos fornecedor</button>
+            <button onclick="selectObjCall('oj2',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Não é o momento</button>
+            <button onclick="selectObjCall('oj3',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Me manda um email</button>
+            <button onclick="selectObjCall('oj4',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Preço caro</button>
+            <button onclick="selectObjCall('oj5',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Não lembro de vocês</button>
+            <button onclick="selectObjCall('oj6',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Não tenho interesse</button>
+            <button onclick="selectObjCall('oj7',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Tive problema antes</button>
+            <button onclick="selectObjCall('oj8',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Quem decide não sou eu</button>
+            <button onclick="selectObjCall('oj9',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Contrato fechado</button>
+            <button onclick="selectObjCall('oj10',this)" class="obj-call-btn bg-slate-800 hover:bg-slate-700 border border-slate-600 text-slate-300 text-xs font-medium px-3 py-1.5 rounded-full transition hover:border-red-600 hover:text-white">Diminuindo volume</button>
+        </div>
+
+        <!-- Resposta expandida -->
+        <div id="obj-call-response" class="hidden mt-3 anim">
+            <div class="bg-slate-800 border border-red-800/50 rounded-xl overflow-hidden">
+                <div class="bg-red-950/60 px-4 py-2.5 flex items-center justify-between">
+                    <span id="ocr-title" class="text-red-400 font-bold text-xs uppercase tracking-wide"></span>
+                    <button onclick="closeObjCall()" class="text-slate-500 hover:text-white text-base leading-none">✕</button>
+                </div>
+                <div class="px-4 py-3">
+                    <p id="ocr-text" class="text-slate-200 text-sm leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================
+     TAB: E-MAIL
+============================= -->
+<div id="section-email" class="tab-section hidden">
+    <p class="text-slate-400 text-sm mb-4">Selecione o cenário para abrir o template:</p>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-5">
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectEmail('ea', this)">
+            <div class="text-2xl mb-2">✉️</div>
+            <div class="font-bold text-white text-sm">Cenário A</div>
+            <div class="text-amber-400 text-xs font-semibold mt-0.5">Sem falar com gestor</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Recepcionista passou o email</div>
+        </div>
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectEmail('eb', this)">
+            <div class="text-2xl mb-2">✅</div>
+            <div class="font-bold text-white text-sm">Cenário B</div>
+            <div class="text-green-400 text-xs font-semibold mt-0.5">Reunião agendada</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Confirmação da reunião</div>
+        </div>
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectEmail('ec', this)">
+            <div class="text-2xl mb-2">💬</div>
+            <div class="font-bold text-white text-sm">Cenário C</div>
+            <div class="text-blue-400 text-xs font-semibold mt-0.5">Falou, sem reunião</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Manter interesse vivo</div>
+        </div>
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectEmail('ef1', this)">
+            <div class="text-2xl mb-2">📊</div>
+            <div class="font-bold text-white text-sm">Follow-up 1</div>
+            <div class="text-purple-400 text-xs font-semibold mt-0.5">Contexto adicional</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Sem resposta ainda</div>
+        </div>
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectEmail('ef2', this)">
+            <div class="text-2xl mb-2">🚪</div>
+            <div class="font-bold text-white text-sm">Follow-up 2</div>
+            <div class="text-red-400 text-xs font-semibold mt-0.5">Último contato</div>
+            <div class="text-slate-500 text-xs mt-1 hidden sm:block">Porta aberta</div>
+        </div>
+    </div>
+
+    <div id="email-panel" class="hidden anim bg-slate-800 rounded-2xl border border-slate-600 overflow-hidden">
+        <div class="bg-slate-700 px-5 py-3 flex items-center justify-between">
+            <span id="ep-title" class="font-bold text-white text-sm"></span>
+            <div class="flex items-center gap-2">
+                <button onclick="copyText('ep-subject','ep-body','E-mail copiado!')"
+                    class="copy-btn bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-4 py-1.5 rounded-lg">COPIAR</button>
+                <button onclick="closePanel('email-panel','section-email')" class="text-slate-400 hover:text-white text-lg">✕</button>
+            </div>
+        </div>
+        <div class="p-4 sm:p-5 space-y-3">
+            <div>
+                <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Assunto</div>
+                <div id="ep-subject" class="bg-slate-700 rounded-lg px-3 py-2 text-sm text-white font-medium"></div>
+            </div>
+            <div>
+                <div class="text-xs text-slate-500 uppercase tracking-wide mb-1">Corpo</div>
+                <div id="ep-body" class="bg-slate-700 rounded-lg px-4 py-3 text-sm text-slate-200 whitespace-pre-line leading-relaxed"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================
+     TAB: LINKEDIN
+============================= -->
+<div id="section-linkedin" class="tab-section hidden">
+    <p class="text-slate-400 text-sm mb-2">Sequência de mensagens — use <strong class="text-white">antes</strong> das ligações:</p>
+    <div class="bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-2 mb-4 text-xs text-slate-400">
+        Ordem correta: Conexão → Agradecimento → Conteúdo → Abordagem direta (só após 2+ ligações)
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectLinkedin('li1', this)">
+            <div class="bg-blue-600 text-white font-black w-8 h-8 rounded-full flex items-center justify-center mb-2">1</div>
+            <div class="font-bold text-white text-sm">Conexão</div>
+            <div class="text-blue-400 text-xs mt-0.5">Sem nota</div>
+        </div>
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectLinkedin('li2', this)">
+            <div class="bg-green-600 text-white font-black w-8 h-8 rounded-full flex items-center justify-center mb-2">2</div>
+            <div class="font-bold text-white text-sm">Agradecimento</div>
+            <div class="text-green-400 text-xs mt-0.5">Após aceite</div>
+        </div>
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectLinkedin('li3', this)">
+            <div class="bg-purple-600 text-white font-black w-8 h-8 rounded-full flex items-center justify-center mb-2">3</div>
+            <div class="font-bold text-white text-sm">Conteúdo</div>
+            <div class="text-purple-400 text-xs mt-0.5">Gerar interesse</div>
+        </div>
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl p-3 sm:p-4"
+             onclick="selectLinkedin('li4', this)">
+            <div class="bg-red-600 text-white font-black w-8 h-8 rounded-full flex items-center justify-center mb-2">4</div>
+            <div class="font-bold text-white text-sm">Abordagem</div>
+            <div class="text-red-400 text-xs mt-0.5">Direta</div>
+        </div>
+    </div>
+
+    <div id="linkedin-panel" class="hidden anim bg-slate-800 rounded-2xl border border-slate-600 overflow-hidden">
+        <div class="bg-slate-700 px-5 py-3 flex items-center justify-between">
+            <span id="lp-title" class="font-bold text-white text-sm"></span>
+            <div class="flex items-center gap-2">
+                <button onclick="copyLinkedin()"
+                    class="copy-btn bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-1.5 rounded-lg">COPIAR</button>
+                <button onclick="closePanel('linkedin-panel','section-linkedin')" class="text-slate-400 hover:text-white text-lg">✕</button>
+            </div>
+        </div>
+        <div class="p-4 sm:p-5">
+            <div id="lp-tip" class="hidden bg-blue-950/50 border border-blue-800/30 rounded-xl px-4 py-2 mb-3 text-blue-300 text-xs"></div>
+            <div id="lp-body" class="bg-slate-700 rounded-lg px-4 py-3 text-sm text-slate-200 whitespace-pre-line leading-relaxed"></div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================
+     TAB: CADÊNCIA
+============================= -->
+<div id="section-cadencia" class="tab-section hidden">
+    <div class="bg-slate-800 rounded-2xl border border-slate-600 p-4 sm:p-5 mb-4">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-5">
+            <div>
+                <div class="font-bold text-white">Cadência de 20 Dias</div>
+                <div class="text-slate-400 text-xs mt-0.5">7 ligações + 3 emails + 2 LinkedIn = 12 tentativas totais</div>
+            </div>
+            <div class="text-xs text-slate-500 bg-slate-700 rounded-lg px-3 py-1.5">
+                Clique em cada dia para ver o script
+            </div>
+        </div>
+
+        <!-- Timeline -->
+        <div class="relative mt-2">
+            <div class="absolute top-5 left-5 right-5 h-px bg-slate-600 z-0"></div>
+            <div class="flex justify-between relative z-10 overflow-x-auto pb-2 gap-1">
+
+                <div class="flex flex-col items-center min-w-[56px] cursor-pointer group" onclick="showDia(1)">
+                    <div class="w-10 h-10 rounded-full bg-red-600 group-hover:bg-red-500 flex items-center justify-center text-white font-black text-sm shadow-md shadow-red-900/40 transition">1</div>
+                    <div class="text-red-400 text-[10px] font-bold mt-1">DIA 1</div>
+                    <div class="text-slate-500 text-[10px]">📞</div>
+                </div>
+
+                <div class="flex flex-col items-center min-w-[56px] cursor-pointer group" onclick="showDia(3)">
+                    <div class="w-10 h-10 rounded-full bg-slate-600 group-hover:bg-slate-500 flex items-center justify-center text-white font-bold text-sm transition">3</div>
+                    <div class="text-slate-400 text-[10px] font-bold mt-1">DIA 3</div>
+                    <div class="text-slate-500 text-[10px]">📞✉️</div>
+                </div>
+
+                <div class="flex flex-col items-center min-w-[56px] cursor-pointer group" onclick="showDia(5)">
+                    <div class="w-10 h-10 rounded-full bg-slate-600 group-hover:bg-slate-500 flex items-center justify-center text-white font-bold text-sm transition">5</div>
+                    <div class="text-slate-400 text-[10px] font-bold mt-1">DIA 5</div>
+                    <div class="text-slate-500 text-[10px]">📞</div>
+                </div>
+
+                <div class="flex flex-col items-center min-w-[56px] cursor-pointer group" onclick="showDia(7)">
+                    <div class="w-10 h-10 rounded-full bg-slate-600 group-hover:bg-slate-500 flex items-center justify-center text-white font-bold text-sm transition">7</div>
+                    <div class="text-slate-400 text-[10px] font-bold mt-1">DIA 7</div>
+                    <div class="text-slate-500 text-[10px]">📞✉️</div>
+                </div>
+
+                <div class="flex flex-col items-center min-w-[56px] cursor-pointer group" onclick="showDia(10)">
+                    <div class="w-10 h-10 rounded-full bg-slate-600 group-hover:bg-slate-500 flex items-center justify-center text-white font-bold text-sm transition">10</div>
+                    <div class="text-slate-400 text-[10px] font-bold mt-1">DIA 10</div>
+                    <div class="text-slate-500 text-[10px]">📞🔗</div>
+                </div>
+
+                <div class="flex flex-col items-center min-w-[56px] cursor-pointer group" onclick="showDia(14)">
+                    <div class="w-10 h-10 rounded-full bg-slate-600 group-hover:bg-slate-500 flex items-center justify-center text-white font-bold text-sm transition">14</div>
+                    <div class="text-slate-400 text-[10px] font-bold mt-1">DIA 14</div>
+                    <div class="text-slate-500 text-[10px]">📞✉️</div>
+                </div>
+
+                <div class="flex flex-col items-center min-w-[56px] cursor-pointer group" onclick="showDia(20)">
+                    <div class="w-10 h-10 rounded-full bg-amber-600 group-hover:bg-amber-500 flex items-center justify-center text-white font-black text-sm transition">20</div>
+                    <div class="text-amber-400 text-[10px] font-bold mt-1">DIA 20</div>
+                    <div class="text-slate-500 text-[10px]">🚪</div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div id="dia-detail" class="hidden anim bg-slate-800 rounded-xl border border-slate-600 p-4 mb-4">
+        <div id="dia-detail-content"></div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 text-center">
+            <div class="text-3xl font-black text-red-400">7</div>
+            <div class="text-xs text-slate-400 mt-1">Ligações</div>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 text-center">
+            <div class="text-3xl font-black text-blue-400">3</div>
+            <div class="text-xs text-slate-400 mt-1">E-mails</div>
+        </div>
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-4 text-center">
+            <div class="text-3xl font-black text-cyan-400">12</div>
+            <div class="text-xs text-slate-400 mt-1">Tentativas totais</div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================
+     TAB: OBJEÇÕES
+============================= -->
+<div id="section-objecoes" class="tab-section hidden">
+    <p class="text-slate-400 text-sm mb-4">Clique na objeção para ver a resposta pronta:</p>
+
+    <div class="space-y-3" id="obj-list">
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">🤝</span>
+                    <span class="font-semibold text-white text-sm">"Já temos fornecedor e estamos satisfeitos"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Que bom! Fico feliz que a operação esteja funcionando bem. Não estou aqui para substituir ninguém. O que proponho é simples: entrar pelo menos no hall de cotação de vocês. Porque um dia pode surgir uma necessidade que o fornecedor atual não consiga atender na velocidade que vocês precisam, ou em uma região que não é o foco dele — e nesses momentos é bom já ter uma segunda opção de confiança. A THX Group atende grandes contas hoje, e nesses momentos de emergência que a gente se destaca. Posso marcar 30 minutos com o Laurence, nosso CEO, só para se conhecerem?"
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">⏰</span>
+                    <span class="font-semibold text-white text-sm">"Não é o momento agora"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Entendo. E sabe, é exatamente quando não tem urgência que vale a conversa — porque aí você avalia com calma, sem pressão. Os clientes que melhor aproveitam a parceria com a THX Group são os que chegaram antes de precisar. Posso só entrar no seu radar agora, sem compromisso nenhum, para que quando surgir uma necessidade você já saiba com quem falar? São 30 minutos com o Laurence essa semana."
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">📧</span>
+                    <span class="font-semibold text-white text-sm">"Me manda um email"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Com certeza! Vou te mandar hoje um email com alguns cases bem detalhados de boas práticas que temos aqui — com certeza vão ser úteis para a realidade de vocês. E já aproveito para combinar: posso te ligar daqui três dias para a gente conversar depois que você tiver visto o material? Aí a conversa já fica muito mais rica."
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">💰</span>
+                    <span class="font-semibold text-white text-sm">"O preço de vocês é caro"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Entendo. Tem uma coisa que o nosso CEO sempre fala: antes de ter um diferencial competitivo, a gente precisa ser competitivo. O frete é caro para quem paga e pouco para quem recebe — e a gente aprendeu a encontrar esse equilíbrio. Justamente pelo perfil de clientes que a THX Group atende, onde o frete é muito espremido, a gente desenvolveu uma eficiência muito grande usando tecnologia para conseguir chegar num valor bem agressivo. Posso marcar 30 minutos com o Laurence para a gente fazer essa análise junto com os números de vocês?"
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">❓</span>
+                    <span class="font-semibold text-white text-sm">"Que empresa é essa? Não me lembro de vocês"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Faz todo sentido não lembrar — faz um bom tempo que a gente trabalhou juntos. Vocês estão numa lista de clientes que a THX Group tem um objetivo muito grande de reativar — porque muita coisa foi construída nesse tempo em que a nossa parceria ficou pausada, e a gente quer muito mostrar isso. Faz sentido marcar 30 minutos para o Laurence, nosso CEO, apresentar pessoalmente o que mudou?"
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">🚫</span>
+                    <span class="font-semibold text-white text-sm">"Não tenho interesse"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Tudo bem, respeito. Só queria deixar uma porta aberta: se um dia surgir uma necessidade de transporte que o fornecedor atual não consiga atender na velocidade ou na região que vocês precisam, pode contar com a THX Group. Posso pelo menos entrar na lista de cotação de vocês para esses momentos?"
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">🔄</span>
+                    <span class="font-semibold text-white text-sm">"Tive um problema com vocês antes"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Obrigada por falar isso diretamente, porque é exatamente o que o Laurence precisa ouvir. Ele está conduzindo pessoalmente essa retomada de clientes e quer saber o que aconteceu em cada caso. Não para se justificar — para mostrar o que mudou na operação desde então. Empresas como Coca-Cola e Mercado Livre também exigiram que a gente provasse antes de fechar. Você toparia dar essa chance? 30 minutos com o CEO pessoalmente."
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">👤</span>
+                    <span class="font-semibold text-white text-sm">"Quem decide isso não sou eu"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Entendo! Mas me fala uma coisa — você é impactado pelo transporte no seu dia a dia de trabalho? Se for, talvez você seja exatamente a pessoa mais indicada para essa primeira conversa. A ideia não é falar de contrato agora, é entender quais são as dores do seu dia a dia e ver como a THX Group pode tornar o seu trabalho mais leve. Se fizer sentido, num segundo momento a gente envolve quem decide. O que você acha?"
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">🔒</span>
+                    <span class="font-semibold text-white text-sm">"Temos contrato fechado com outro fornecedor"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Faz sentido. E não estou propondo que vocês quebrem nada. O que quero é que a THX Group esteja na lista quando vocês abrirem o próximo bid. Empresas do porte de vocês geralmente têm esse ciclo de concorrência — quando costuma ser a próxima janela de abertura? Quero estar posicionado antes disso acontecer."
+                </div>
+            </div>
+        </div>
+
+        <div class="obj-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleObj(this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-xl shrink-0">📉</span>
+                    <span class="font-semibold text-white text-sm">"Estamos diminuindo volume / em reestruturação"</span>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 arrow">▼</span>
+            </div>
+            <div class="obj-body hidden px-4 pb-4 anim">
+                <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200 leading-relaxed">
+                    <span class="text-green-400 font-bold block mb-1.5">Resposta:</span>
+                    "Esse é exatamente o momento onde a escolha do parceiro de transporte importa mais. Quando o volume cai, o custo logístico por unidade sobe — e quem tem um fornecedor com tecnologia de roteirização e consolidação de carga consegue proteger margem mesmo com menos volume. É o que a THX faz com vários clientes em período de ajuste. Vale uma conversa de 30 minutos para entender se tem sinergia?"
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- ============================
+     TAB: MAPEAR
+============================= -->
+<div id="section-mapear" class="tab-section hidden">
+    <p class="text-slate-400 text-sm mb-4">Use antes de ligar. <strong class="text-red-400">Regra de ouro:</strong> se não sabe o nome, cargo e o que a empresa faz hoje, você NÃO está pronta para ligar.</p>
+
+    <div class="space-y-4">
+
+        <!-- Pesquisa Empresa -->
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleMapear('map-empresa', this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl shrink-0">🏢</span>
+                    <div>
+                        <div class="font-bold text-white text-sm">1.1 — Pesquisa da Empresa</div>
+                        <div class="text-slate-400 text-xs mt-0.5">Ela ainda existe e faz sentido?</div>
+                    </div>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 map-arrow">▼</span>
+            </div>
+            <div id="map-empresa" class="hidden px-4 pb-4 anim">
+                <div class="grid sm:grid-cols-3 gap-3 mt-1">
+                    <div class="bg-slate-700 rounded-xl p-3">
+                        <div class="text-blue-400 font-bold text-xs uppercase mb-2">🔍 Google</div>
+                        <ul class="text-slate-300 text-xs space-y-1.5">
+                            <li>• Buscar "[nome da empresa]" — site ativo? Notícias recentes?</li>
+                            <li>• "[empresa] + logística" ou "+ transporte"</li>
+                            <li>• "[empresa] + vagas" — se contrata para logística, área está crescendo</li>
+                            <li>• Google Maps — ainda no mesmo endereço?</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-700 rounded-xl p-3">
+                        <div class="text-cyan-400 font-bold text-xs uppercase mb-2">💼 LinkedIn</div>
+                        <ul class="text-slate-300 text-xs space-y-1.5">
+                            <li>• Página da empresa — cresceu ou encolheu?</li>
+                            <li>• Buscar: Gerente Logística, Coord. Supply Chain, Comprador, Dir. Operações</li>
+                            <li>• Verificar se o contato antigo ainda está lá</li>
+                            <li>• Conexões em comum com o time THX?</li>
+                        </ul>
+                    </div>
+                    <div class="bg-slate-700 rounded-xl p-3">
+                        <div class="text-green-400 font-bold text-xs uppercase mb-2">📊 Pipedrive</div>
+                        <ul class="text-slate-300 text-xs space-y-1.5">
+                            <li>• Ler TODAS as notas e atividades do histórico</li>
+                            <li>• Por que parou? Qual motivo de saída?</li>
+                            <li>• Tipo de carga, rotas, volume, quanto faturou</li>
+                            <li>• Data da última atividade</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pesquisa Decisor -->
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleMapear('map-decisor', this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl shrink-0">👤</span>
+                    <div>
+                        <div class="font-bold text-white text-sm">1.2 — Pesquisa do Decisor</div>
+                        <div class="text-slate-400 text-xs mt-0.5">Quem decide hoje?</div>
+                    </div>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 map-arrow">▼</span>
+            </div>
+            <div id="map-decisor" class="hidden px-4 pb-4 anim">
+                <div class="grid sm:grid-cols-2 gap-3 mt-1">
+                    <div class="bg-slate-700 rounded-xl p-3">
+                        <div class="text-amber-400 font-bold text-xs uppercase mb-2">Perfis a buscar</div>
+                        <div class="flex flex-wrap gap-1.5">
+                            <span class="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Gerente de Logística</span>
+                            <span class="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Coord. Supply Chain</span>
+                            <span class="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Comprador</span>
+                            <span class="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Gerente de Compras</span>
+                            <span class="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Dir. Operações</span>
+                            <span class="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Analista de Logística</span>
+                            <span class="bg-slate-600 text-slate-200 text-xs px-2 py-0.5 rounded-full">Gestor de Transportes</span>
+                        </div>
+                    </div>
+                    <div class="bg-slate-700 rounded-xl p-3">
+                        <div class="text-purple-400 font-bold text-xs uppercase mb-2">Como encontrar</div>
+                        <ul class="text-slate-300 text-xs space-y-1.5">
+                            <li>• LinkedIn: buscar na página da empresa por cargo</li>
+                            <li>• Site: seção "Equipe" ou "Sobre"</li>
+                            <li>• Google: "[empresa] + gerente logística"</li>
+                            <li>• Recepção: ligar e perguntar diretamente</li>
+                        </ul>
+                        <div class="mt-2 bg-amber-950/50 border border-amber-800/30 rounded-lg px-3 py-1.5 text-amber-200 text-xs">
+                            💡 Ter o nome antes de ligar aumenta 3x a chance de passar pela recepção
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Checklist da ficha -->
+        <div class="situation-card bg-slate-800 border-2 border-slate-600 rounded-xl overflow-hidden"
+             onclick="toggleMapear('map-ficha', this)">
+            <div class="px-4 py-3.5 flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <span class="text-2xl shrink-0">✅</span>
+                    <div>
+                        <div class="font-bold text-white text-sm">1.3 — Checklist antes de ligar</div>
+                        <div class="text-slate-400 text-xs mt-0.5">Todos marcados? Pode ligar!</div>
+                    </div>
+                </div>
+                <span class="text-slate-400 text-sm shrink-0 map-arrow">▼</span>
+            </div>
+            <div id="map-ficha" class="hidden px-4 pb-4 anim">
+                <div class="grid sm:grid-cols-2 gap-2 mt-1" id="checklist-items">
+                    <!-- Gerado por JS -->
+                </div>
+                <button onclick="resetChecklist()" class="mt-3 text-xs text-slate-500 hover:text-slate-300 underline">Reiniciar checklist</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</main>
+
+<!-- TOAST -->
+<div id="toast" class="fixed bottom-6 right-4 bg-green-600 text-white px-5 py-2.5 rounded-xl shadow-xl text-sm font-bold hidden z-50 anim">✓ Copiado!</div>
+
+<!-- ============================
+     SCRIPTS
+============================= -->
+<script>
+// =========================================
+// DATA
+// =========================================
+const SCRIPTS = {
+    recep_sem_nome: {
+        icon: '📞', title: 'Recepcionista', sub: 'Sem nome do contato',
+        main: 'Abertura:',
+        mainText: '"Bom dia! Meu nome é [FARMER], sou da THX Group. Tudo bem? Preciso tirar uma dúvida sobre um transporte — gostaria de falar com a pessoa responsável pela área de logística ou transporte de vocês. Seria possível me transferir?"',
+        tip: 'Objetivo: sair com o NOME do decisor. Seja cordial, não vá direto ao ponto.',
+        subs: [
+            { label: '↳ Se transferir direto', text: 'Use o script "Decisor atendeu — 1ª conversa". Clique no card acima.' },
+            { label: '↳ Se perguntar o assunto', text: '"Claro! É para tirar algumas dúvidas sobre os carregamentos de vocês."' },
+            { label: '↳ Se perguntar qual empresa', text: '"Sou da THX Group, empresa de logística. Pode me passar o nome e o contato de quem cuida disso hoje?"' },
+        ],
+        fechamento: false
+    },
+    recep_com_nome: {
+        icon: '📋', title: 'Recepcionista', sub: 'Com nome do contato',
+        main: 'Abertura:',
+        mainText: '"Bom dia! Gostaria de falar com o [NOME], por favor. Me pediram para retornar."',
+        tip: '"Me pediram para retornar" funciona melhor do que "quero vender algo". Seja natural.',
+        subs: [
+            { label: '↳ Se disser que a pessoa saiu', text: '"Entendi. Pode me passar alguém da logística de vocês, responsável pelos carregamentos? Preciso de uma informação sobre uma carga."' },
+            { label: '↳ Se perguntar quem está ligando', text: '"É [FARMER] da THX Group. Já tive contato com [NOME] anteriormente."' },
+            { label: '↳ Se disser que está ocupado', text: '"Sem problema! Quando seria melhor eu retornar — amanhã de manhã ou à tarde?"' },
+        ],
+        fechamento: false
+    },
+    decisor_primeira: {
+        icon: '🎯', title: 'Decisor atendeu', sub: '1ª conversa',
+        main: 'Abertura (20 segundos):',
+        mainText: '"[NOME], boa tarde! Meu nome é [FARMER], da THX Group. A [EMPRESA] já operou com a gente no passado e de lá pra cá a THX se transformou muito. A gente se tornou uma empresa muito tecnológica e hoje atende Coca-Cola, Mercado Livre, WEG. Nosso objetivo é levar essa mesma metodologia de distribuição que a gente usa com essas grandes empresas para outras empresas que querem esse nível de excelência. Queria entender rapidamente como está a logística de vocês hoje. São 4 perguntas bem rápidas."',
+        tip: 'Você tem 20 segundos para gerar interesse. Use o NOME da pessoa. Seja direta.',
+        subs: [
+            { label: '📋 4 Perguntas de Qualificação', text: '1. "Qual o maior desafio de vocês com transporte hoje?"\n2. "Quais são as principais rotas que vocês operam?"\n3. "Quantas cargas dedicadas vocês carregam por mês, aproximadamente?"\n4. "Vocês trabalham com tabela de fornecedor fixa ou é cotação carga a carga?"' },
+            { label: '↳ Se não puder falar agora', text: '"Sem problema nenhum. Quando seria melhor — amanhã às 10h ou às 14h?" (Sempre oferecer opções. Registrar no Pipedrive imediatamente.)' },
+            { label: '↳ Se não tiver interesse', text: '"Entendo perfeitamente. Só para eu não ficar no escuro: vocês estão bem atendidos hoje com a transportadora atual ou é uma questão de momento? Às vezes faz sentido ter uma segunda opção de cotação, sem compromisso."' },
+        ],
+        fechamento: true
+    },
+    retomada: {
+        icon: '🔄', title: 'Retomada', sub: 'Já falou antes',
+        main: 'Abertura:',
+        mainText: '"[NOME], bom dia! Aqui é [FARMER] da THX Group. A gente conversou [semana passada / há alguns dias] e eu queria dar continuidade."',
+        tip: 'Não repita o pitch de apresentação. Você já se apresentou. Foco total em agendar a reunião.',
+        subs: [
+            { label: '↳ Se o decisor abrir espaço', text: '"Queria entender melhor a operação de vocês. O Laurence, nosso CEO, está pessoalmente envolvido nessa retomada de clientes e ele mesmo faz a primeira reunião. Você teria 30 minutos essa semana ou na próxima?"' },
+            { label: '↳ Se disser que não teve tempo de pensar', text: '"Sem problema. Não precisa ter pensado nada, é só uma conversa para a gente entender o cenário de vocês hoje. 30 minutos e eu já consigo te dizer se faz sentido ou não."' },
+            { label: '↳ Se não lembrar da conversa anterior', text: '"Liguei há alguns dias, você estava ocupado e me pediu para retornar. Sou da THX Group, a empresa de vocês já operou com a gente no passado."' },
+        ],
+        fechamento: false
+    },
+    despedida: {
+        icon: '🚪', title: 'Ligação de Despedida', sub: 'Última tentativa — Dia 20',
+        main: 'Script único:',
+        mainText: '"[NOME], bom dia! Aqui é [FARMER] da THX Group. Tentei falar com você algumas vezes nas últimas semanas e não consegui. Entendo que pode não ser o momento certo e não quero tomar seu tempo. Esse vai ser meu último contato. Se em algum momento precisar de uma opção de transporte com rastreamento em tempo real e custo competitivo, pode me chamar que estarei por aqui."',
+        tip: 'IMPORTANTE: Após o script, PARE. Espere a reação. Não complete a frase. O silêncio é sua ferramenta.',
+        subs: [
+            { label: '↳ Se demonstrar interesse — PARAR e esperar', text: '"Fico feliz que tenha falado. Posso te propor uma conversa rápida de 30 minutos com o nosso CEO para entender o que faz sentido para vocês?"' },
+            { label: '↳ Se não atender — caixa postal', text: 'Deixe o recado com o mesmo texto. Depois registre como Descartado no Pipedrive com motivo: "sem resposta após 7 tentativas".' },
+        ],
+        fechamento: false
+    },
+    caixa_postal: {
+        icon: '📬', title: 'Caixa Postal', sub: 'Não atendeu',
+        main: 'Recado de voz:',
+        mainText: '"[NOME], boa tarde. Aqui é [FARMER] da THX Group. Tentei falar com você hoje sobre a parceria que vocês tinham com a THX. Quando tiver um momento, pode me retornar no [TELEFONE]? Obrigada."',
+        tip: 'Curto e objetivo. Não vende nada. Só pede o retorno. Máximo 2 vezes durante a cadência.',
+        subs: [],
+        fechamento: false
+    }
+};
+
+const EMAILS = {
+    ea: {
+        title: 'Cenário A — Ainda não falou com o gestor',
+        subject: 'Operação de transporte — [EMPRESA]',
+        body: `[NOME], boa tarde.
+
+Meu nome é [FARMER], sou da THX Group. Tentei falar com você por telefone hoje e me passaram seu contato.
+
+A [EMPRESA] já operou com a gente no passado e eu queria muito retomar essa conversa. A THX evoluiu muito desde a última vez que trabalhamos juntos. Nos tornamos uma empresa extremamente tecnológica e hoje atendemos empresas como Coca-Cola, Mercado Livre, WEG, Ambev e FEMSA. Nosso objetivo é levar essa mesma metodologia de distribuição que usamos com essas grandes referências para outras empresas que buscam excelência logística.
+
+Seria possível reservar 30 minutos essa semana ou na próxima? A reunião seria com o Laurence, nosso CEO, que está pessoalmente envolvido nessa retomada.
+
+Posso ligar para você na [DIA] às [HORA]?
+
+Abraços,
+[FARMER] | THX Group | [TELEFONE]`
+    },
+    eb: {
+        title: 'Cenário B — Reunião agendada',
+        subject: 'Reunião confirmada — THX Group x [EMPRESA]',
+        body: `[NOME], boa tarde.
+
+Foi um prazer falar com você hoje. Muito obrigada por abrir esse espaço para a gente se reconectar.
+
+Segue a confirmação do que combinamos:
+Data: [DIA]
+Horário: [HORA]
+Formato: [Presencial / Google Meet / Teams]
+
+Estarei junto com o Laurence, nosso CEO. Tenho certeza que vai ser uma conversa muito produtiva.
+
+Qualquer dúvida é só me chamar.
+
+Abraços,
+[FARMER] | THX Group | [TELEFONE]`
+    },
+    ec: {
+  2     title: 'Cenário C — Falou, reunião não agendada',
+        subject: 'THX Group x [EMPRESA] — Obrigada pelo contato',
+        body: `[NOME], boa tarde.
+
+Obrigada por ter atendido minha ligação hoje. Foi um prazer falar com você.
+
+Quero deixar alguns pontos que acho que vão fazer diferença na sua avaliação:
+
+A THX atende hoje empresas como Coca-Cola, Mercado Livre, WEG, Ambev e FEMSA. O que construímos com essas operações nos tornou extremamente competitivos em tarifa e muito eficientes em execução. Nossos clientes têm conseguido reduções reais de custo logístico sem abrir mão de rastreamento em tempo real e atendimento dedicado.
+
+Tenho certeza que se você abrir um espaço de 30 minutos para ouvir o que o Laurence, nosso CEO, tem a dizer, vai valer muito a pena. Não estamos falando de uma conversa de vendedor, mas de um mapeamento real de como podemos ajudar a operação de vocês.
+
+Posso agendar esse papo para essa semana ou na próxima?
+
+Abraços,
+[FARMER] | THX Group | [TELEFONE]`
+    },
+    ef1: {
+   �0   title: 'Follow-up 1 — Contexto adicional',
+        subject: 'RE: THX Logtech',
+        body: `[NOME], boa tarde.
+
+Quero te dar mais contexto para você avaliar se faz sentido a gente conversar.
+
+Nos últimos anos a THX se tornou referência em redução de custo logístico para médias e grandes empresas. Alguns dos nossos clientes reduziram entre 12% e 18% do custo por km após migrar para a THX, com melhora no OTIF e rastreamento em tempo real de toda a operação.
+
+Atendemos hoje empresas como Coca-Cola, Mercado Livre, WEG, Ambev e FEMSA. O que desenvolvemos com essas grandes operações é exatamente o que queremos levar para vocês.
+
+A reunião que proponho é com o Laurence, nosso CEO, e são 30 minutos. Sem compromisso. Só para entender se existe sinergia e o que poderíamos fazer pela operação de vocês.
+
+Vale 30 minutos do seu tempo?
+
+Abraços,
+[FARMER] | THX Group | [TELEFONE]`
+    },
+    ef2: {
+        title: 'Follow-up 2 — Último contato',
+        subject: 'RE: THX Logtech',
+        body: `[NOME], boa tarde.
+
+Tentei contato algumas vezes e entendo que pode não ser o momento. Sem problema nenhum.
+
+Só queria deixar a porta aberta: se em algum momento a [EMPRESA] precisar de uma opção de transporte com tecnologia de rastreamento em tempo real e custo competitivo, pode contar com a THX.
+
+Meu contato fica aqui caso precise no futuro.
+
+Abraços,
+[FARMER] | THX Group | [TELEFONE]`
+    }
+};
+
+const LINKEDIN = {
+    li1: {
+        title: 'Passo 1 — Pedido de Conexão',
+        tip: 'Enviar SEM nota. Pedidos com nota têm menos aceite — parece imediatamente um vendedor.',
+        body: '(Enviar pedido de conexão sem nenhuma mensagem anexada)'
+    },
+    li2: {
+        title: 'Passo 2 — Agradecimento pós-conexão',
+        tip: 'Curto, humano, sem pedir nada. Só agradecer e abrir uma porta.',
+        body: '[NOME], obrigada por aceitar minha conexão! Trabalho com logística na THX Group e fico sempre de olho em profissionais da área. Qualquer troca de ideia sobre o setor, estou por aqui.'
+    },
+    li3: {
+        title: 'Passo 3 — Conteúdo de Valor',
+        tip: 'Use dado do setor: custo do diesel, tabela Ai esse conteúdo aqui e lembrei da nossa conexão. Acho que pode ser relevante para quem trabalha com logística. [LINK DO ARTIGO / CASE THX]. Qualquer dúvida sobre o assunto, pode me chamar.'
+    },
+    li4: {
+        title: 'Passo 4 — Abordagem Direta',
+        tip: 'Usar SOMENTE após pelo menos 2 tentativas por telefone sem sucesso.',
+        body: '[NOME], tentei falar com você por telefone e e-mail mas não consegui. Não quero ser invasivo, mas a [EMPRESA] já operou com a THX no passado e acredito que vale a pena a gente retomar uma conversa. Atendemos hoje Coca-Cola, Mercado Livre, WEG e Ambev. O Laurence, nosso CEO, faz pessoalmente a primeira reunião com clientes estratégicos. Faz sentido a gente conversar 30 minutos?'
+    }
+};
+
+const CADENCIA = {
+    1:  { title: 'Dia 1 — Primeira Ligação', actions: '📞 Ligar para o decisor (ou recepcionista)', script: 'Use o script correto conforme quem atendeu. Registrar resultado no Pipedrive imediatapt correto conforme quem atendeu. Registrar resultado no Pipedrive imediatamente após.' },
+    3:  { title: 'Dia 3 — Segunda tentativa', actions: '📞 2ª ligação + ✉️ Email Cenário A', script: 'Tente em horário diferente do Dia 1. Envie o Email A logo após a ligação.' },
+    5:  { title: 'Dia 5 — Terceira tentativa', actions: '📞 3ª ligação', script: 'Se já tem o nome: use Recepcionista com nome. Se já falou: use Retomada.' },
+    7:  { title: 'Dia 7 — Quarta tentativa', actions: '📞 4ª ligação + ✉️ Follow-up 1', script: 'Envie o Follow-up 1 para dar mais contexto. Verifique se aceitou conexão no LinkedIn.' },
+    10: { title: 'Dia 10 — Quinta tentativa', actions: '📞 5ª ligação + 🔗 LinkedIn (Passo 3 ou 4)', script: 'LinkedIn entra agora se ainda não conseguiu falar. Use Abordagem Direta (Passo 4) se teve 2+ ligações sem sucesso.' },
+    14: { title: 'Dia 14 — Sexta tentativa', actions: '📞 6ª ligação + ✉️ Follow-up 2 (opcional)', script: 'Penúltima tentativa. Se houve qualquer abertura, seja mais insistente aqui.' },
+    20: { title: 'Dia 20 — Ligação de Despedida', actions: '📞 7ª e última ligação', script: 'Use o script de DESPEDIDA. Após isso: Descartado no Pipedrive com motivo "sem resposta após 7 tentativas".' }
+};
+
+const CHECKLIST = [
+    'Empresa ainda existe e está ativa?',
+    'Site da empresa está no ar?',
+    'Verificou no LinkedIn — quantos funcionários, cresceu?',
+    'Tem o nome do decisor atual?',
+    'Sabe o cargo do decisor?',
+    'Tem o telefone direto ou ramal?',
+    'Leu o histórico completo no Pipedrive?',
+    'Sabe por que o cliente parou de usar a THX?',
+    'Sabe quais rotas/tipo de carga ele operava?',
+    'Atualizou o contato no Pipedrive?',
+];
+
+// =========================================
+// STATE
+// =========================================
+let timerRunning = false, timerSecs = 0, timerInt = null;
+
+// =========================================
+// TABS
+// =========================================
+function showTab(tab) {
+    document.querySelectorAll('.tab-section').forEach(s => s.classList.add('hidden'));
+    document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active', 'text-red-400');
+        b.classList.add('text-slate-400');
+    });
+    document.getElementById('section-' + tab).classList.remove('hidden');
+    const btn = document.getElementById('tab-' + tab);
+    btn.classList.add('active', 'text-red-400');
+    btn.classList.remove('text-slate-400');
+    if (tab === 'mapear') renderChecklist();
+}
+
+// =========================================
+// LIGAÇÃO
+// =========================================
+function selectScript(key, el) {
+    document.querySelectorAll('#section-ligacao .situation-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+
+    const d = SCRIPTS[key];
+    if (!d) return;
+
+    document.getElementById('sp-icon').textContent  = d.icon;
+    document.getElementById('sp-title').textContent = d.title;
+    document.getElementById('sp-sub').textContent   = d.sub;
+
+    // Main
+    document.getElementById('sp-main').innerHTML = `
+        <div class="mb-4">
+            <div class="text-xs text-slate-400 uppercase tracking-wide mb-2">${d.main}</div>
+            <div class="script-box rounded-xl p-4 text-slate-100 text-sm leading-relaxed font-medium">${d.mainText}</div>
+        </div>
+    `;
+
+    // Tip
+    const tipEl = document.getElementById('sp-tip');
+    if (d.tip) {
+        document.getElementById('sp-tip-text').textContent = d.tip;
+        tipEl.classList.remove('hidden');
+    } else {
+        tipEl.classList.add('hidden');
+    }
+
+    // Subs
+    const subsEl = document.getElementById('sp-subs');
+    if (d.subs && d.subs.length) {
+        subsEl.innerHTML = `
+            <div class="text-xs text-slate-400 uppercase tracking-wide mb-2">Respostas por situação — clique para expandir:</div>
+            <div class="space-y-2">
+                ${d.subs.map((s, i) => `
+                    <div class="sub-card border-l-2 border-slate-600 bg-slate-700/40 rounded-r-xl overflow-hidden"
+                         onclick="toggleSub('sub${i}', this)">
+                        <div class="px-4 py-2.5 flex items-center justify-between">
+                            <span class="text-slate-300 text-sm font-medium">${s.label}</span>
+                            <span class="text-slate-500 text-xs sub-arrow">▼</span>
+                        </div>
+                        <div id="sub${i}" class="hidden px-4 pb-3 anim">
+                            <div class="bg-slate-800 rounded-lg p-3 text-sm text-slate-200 leading-relaxed whitespace-pre-line">${s.text}</div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    } else {
+        subsEl.innerHTML = '';
+    }
+
+    // Fechamento
+    const fb = document.getElementById('fechamento-box');
+    d.fechamento ? fb.classList.remove('hidden') : fb.classList.add('hidden');
+
+    const panel = document.getElementById('script-panel');
+    panel.classList.remove('hidden');
+    panel.classList.add('anim');
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+function toggleSub(id, el) {
+    const body = document.getElementById(id);
+    const arrow = el.querySelector('.sub-arrow');
+    const isHidden = body.classList.contains('hidden');
+    // close all
+    document.querySelectorAll('[id^="sub"]').forEach(e => e.classList.add('hidden'));
+    document.querySelectorAll('.sub-arrow').forEach(a => a.textContent = '▼');
+    document.querySelectorAll('.sub-card').forEach(c => c.classList.remove('open'));
+    if (isHidden) {
+        body.classList.remove('hidden');
+        arrow.textContent = '▲';
+        el.classList.add('open');
+    }
+}
+
+function closeScript() {
+    document.getElementById('script-panel').classList.add('hidden');
+    document.getElementById('fechamento-box').classList.add('hidden');
+    document.querySelectorAll('#section-ligacao .situation-card').forEach(c => c.classList.remove('active'));
+}
+
+// =========================================
+// EMAIL
+// =========================================
+function selectEmail(key, el) {
+    document.querySelectorAll('#section-email .situation-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    const d = EMAILS[key]; if (!d) return;
+    document.getElementById('ep-title').textContent   = d.title;
+    document.getElementById('ep-subject').textContent = d.subject;
+    document.getElementById('ep-body').textContent    = d.body;
+    const p = document.getElementById('email-panel');
+    p.classList.remove('hidden'); p.classList.add('anim');
+    setTimeout(() => p.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+// =========================================
+// LINKEDIN
+// =========================================
+function selectLinkedin(key, el) {
+    document.querySelectorAll('#section-linkedin .situation-card').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    const d = LINKEDIN[key]; if (!d) return;
+    document.getElementById('lp-title').textContent = d.title;
+    document.getElementById('lp-body').textContent  = d.body;
+    const tipEl = document.getElementById('lp-tip');
+    if (d.tip) { tipEl.textContent = '💡 ' + d.tip; tipEl.classList.remove('hidden'); }
+    else        { tipEl.classList.add('hidden'); }
+    const p = document.getElementById('linkedin-panel');
+    p.classList.remove('hidden'); p.classList.add('anim');
+    setTimeout(() => p.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+}
+
+function copyLinkedin() {
+    const text = document.getElementById('lp-body').textContent;
+    navigator.clipboard.writeText(text).then(() => toast('Mensagem copiada!'));
+}
+
+// =========================================
+// CADÊNCIA
+// =========================================
+function showDia(n) {
+    const d = CADENCIA[n]; if (!d) return;
+    const c = document.getElementById('dia-detail-content');
+    c.innerHTML = `
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-black text-lg shrink-0">${n}</div>
+            <div>
+                <div class="font-bold text-white">${d.title}</div>
+                <div class="text-xs text-slate-400 mt-0.5">${d.actions}</div>
+            </div>
+        </div>
+        <div class="bg-slate-700 rounded-xl p-4 text-sm text-slate-200">${d.script}</div>
+    `;
+    const det = document.getElementById('dia-detail');
+    det.classList.remove('hidden'); det.classList.add('anim');
+}
+
+// =========================================
+// OBJEÇÕES DA CALL (botões na aba LIGAÇÃO)
+// =========================================
+const OBJ_CALL = {
+    oj1:  { title: '🤝 Já temos fornecedor', text: '"Que bom! Fico feliz que a operação esteja funcionando bem. Não estou aqui para substituir ninguém. O que proponho é simples: entrar pelo menos no hall de cotação de vocês. Porque um dia pode surgir uma necessidade que o fornecedor atual não consiga atender na velocidade que vocês precisam, ou em uma região que não é o foco dele — e nesses momentos é bom já ter uma segunda opção de confiança. A THX Group atende grandes contas hoje, e nesses momentos de emergência que a gente se destaca. Posso marcar 30 minutos com o Laurence, nosso CEO, só para se conhecerem?"' },
+    oj2:  { title: '⏰ Não é o momento', text: '"Entendo. E sabe, é exatamente quando não tem urgência que vale a conversa — porque aí você avalia com calma, sem pressão. Os clientes que melhor aproveitam a parceria com a THX Group são os que chegaram antes de precisar. Posso só entrar no seu radar agora, sem compromisso nenhum, para que quando surgir uma necessidade você já saiba com quem falar? São 30 minutos com o Laurence essa semana."' },
+    oj3:  { title: '📧 Me manda um email', text: '"Com certeza! Vou te mandar hoje um email com alguns cases bem detalhados de boas práticas que temos aqui — com certeza vão ser úteis para a realidade de vocês. E já aproveito para combinar: posso te ligar daqui três dias para a gente conversar depois que você tiver visto o material? Aí a conversa já fica muito mais rica."' },
+    oj4:  { title: '💰 Preço caro', text: '"Entendo. Tem uma coisa que o nosso CEO sempre fala: antes de ter um diferencial competitivo, a gente precisa ser competitivo. O frete é caro para quem paga e pouco para quem recebe — e a gente aprendeu a encontrar esse equilíbrio. Justamente pelo perfil de clientes que a THX Group atende, onde o frete é muito espremido, a gente desenvolveu uma eficiência muito grande usando tecnologia para conseguir chegar num valor bem agressivo. Posso marcar 30 minutos com o Laurence para a gente fazer essa análise junto com os números de vocês?"' },
+    oj5:  { title: '❓ Não lembro de vocês', text: '"Faz todo sentido não lembrar — faz um bom tempo que a gente trabalhou juntos. Vocés estão numa lista de clientes que a THX Group tem um objetivo muito grande de reativar — porque muita coisa foi construída nesse tempo em que a nossa parceria ficou pausada, e a gente quer muito mostrar isso. Faz sentido marcar 30 minutos para o Laurence, nosso CEO, apresentar pessoalmente o que mudou?"' },
+    oj6:  { title: '🚫 Não tenho interesse', text: '"Tudo bem, respeito. Só queria deixar uma porta aberta: se um dia surgir uma necessidade de transporte que o fornecedor atual não consiga atender na velocidade ou na região que vocês precisam, pode contar com a THX Group. Posso pelo menos entrar na lista de cotação de vocês para esses momentos?"' },
+    oj7:  { title: '🔄 Tive problema antes', text: '"Obrigada por falar isso diretamente, porque é exatamente o que o Laurence precisa ouvir. Ele está conduzindo pessoalmente essa retomada de clientes e quer saber o que aconteceu em cada caso. Não para se justificar — para mostrar o que mudou na operação desde então. Empresas como Coca-Cola e Mercado Livre também exigiram que a gente provasse antes de fechar. Você toparia dar essa chance? 30 minutos com o CEO pessoalmente."' },
+    oj8:  { title: '👤 Quem decide não sou eu', text: '"Entendo! Mas me fala uma coisa — você é impactado pelo transporte no seu dia a dia de trabalho? Se for, talvez você seja exatamente a pessoa mais indicada para essa primeira conversa. A ideia não é falar de contrato agora, é entender quais são as dores do seu dia a dia e ver como a THX Group pode tornar o seu trabalho mais leve. Se fizer sentido, num segundo momento a gente envolve quem decide. O que você acha?"' },
+    oj9:  { title: '🔒 Contrato fechado', text: '"Faz sentido. E não estou propondo que vocês quebrem nada. O que quero é que a THX Group esteja na lista quando vocês abrirem o próximo bid. Empresas do porte de vocês geralmente têm esse ciclo de concorrência — quando costuma ser a próxima janela de abertura? Quero estar posicionado antes disso acontecer."' },
+    oj10: { title: '📉 Diminuindo volume', text: '"Esse é exatamente o momento onde a escolha do parceiro de transporte importa mais. Quando o volume cai, o custo logístico por unidade sobe — e quem tem um fornecedor com tecnologia de roteirização e consolidação de carga consegue proteger margem mesmo com menos volume. É o que a THX Group faz com vários clientes em período de ajuste. Vale uma conversa de 30 minutos para entender se tem sinergia?"' },
+};
+
+function selectObjCall(key, btn) {
+    const d = OBJ_CALL[key]; if (!d) return;
+    // Toggle: se já está aberto para essa objeção, fecha
+    const resp = document.getElementById('obj-call-response');
+    const currentKey = resp.dataset.key;
+    if (!resp.classList.contains('hidden') && currentKey === key) {
+        closeObjCall(); return;
+    }
+    // Destaca o botão ativo
+    document.querySelectorAll('.obj-call-btn').forEach(b => {
+        b.classList.remove('bg-red-600','border-red-600','text-white');
+        b.classList.add('bg-slate-800','border-slate-600','text-slate-300');
+    });
+    btn.classList.remove('bg-slate-800','border-slate-600','text-slate-300');
+    btn.classList.add('bg-red-600','border-red-600','text-white');
+    // Preenche e exibe
+    document.getElementById('ocr-title').textContent = d.title;
+    document.getElementById('ocr-text').textContent  = d.text;
+    resp.dataset.key = key;
+    resp.classList.remove('hidden');
+    resp.classList.add('anim');
+    resp.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function closeObjCall() {
+    const resp = document.getElementById('obj-call-response');
+    resp.classList.add('hidden');
+    resp.dataset.key = '';
+    document.querySelectorAll('.obj-call-btn').forEach(b => {
+        b.classList.remove('bg-red-600','border-red-600','text-white');
+        b.classList.add('bg-slate-800','border-slate-600','text-slate-300');
+    });
+}
+
+// =========================================
+// OBJEÇÕES (aba dedicada)
+// =========================================
+function toggleObj(card) {
+    const body  = card.querySelector('.obj-body');
+    const arrow = card.querySelector('.arrow');
+    const isHidden = body.classList.contains('hidden');
+    body.classList.toggle('hidden', !isHidden);
+    body.classList.toggle('anim', isHidden);
+    card.classList.toggle('open', isHidden);
+    arrow.textContent = isHidden ? '▲' : '▼';
+}
+
+// =========================================
+// MAPEAR
+// =========================================
+function toggleMapear(id, card) {
+    const body  = document.getElementById(id);
+    const arrow = card.querySelector('.map-arrow');
+    const isHidden = body.classList.contains('hidden');
+    body.classList.toggle('hidden', !isHidden);
+    body.classList.toggle('anim', isHidden);
+    arrow.textContent = isHidden ? '▲' : '▼';
+}
+
+function renderChecklist() {
+    const saved = JSON.parse(localStorage.getItem('thx-check') || '{}');
+    const el = document.getElementById('checklist-items');
+    el.innerHTML = CHECKLIST.map((item, i) => `
+        <label class="flex items-start gap-3 bg-slate-700 rounded-xl px-3 py-2.5 cursor-pointer hover:bg-slate-600 transition">
+            <input type="checkbox" class="mt-0.5 accent-red-500 shrink-0" ${saved[i] ? 'checked' : ''}
+                   onchange="saveCheck(${i}, this.checked)">
+            <span class="text-sm text-slate-200">${item}</span>
+        </label>
+    `).join('');
+}
+
+function saveCheck(i, v) {
+    const s = JSON.parse(localStorage.getItem('thx-check') || '{}');
+    s[i] = v;
+    localStorage.setItem('thx-check', JSON.stringify(s));
+}
+
+function resetChecklist() {
+    localStorage.removeItem('thx-check');
+    renderChecklist();
+}
+
+// =========================================
+// GENERIC HELPERS
+// =========================================
+function copyText(subjectId, bodyId, msg) {
+    const subj = document.getElementById(subjectId).textContent;
+    const body = document.getElementById(bodyId).textContent;
+    navigator.clipboard.writeText(`Assunto: ${subj}\n\n${body}`).then(() => toast(msg || 'Copiado!'));
+}
+
+function closePanel(panelId, sectionId) {
+    document.getElementById(panelId).classList.add('hidden');
+    document.querySelectorAll(`#${sectionId} .situation-card`).forEach(c => c.classList.remove('active'));
+}
+
+function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = '✓ ' + msg;
+    t.classList.remove('hidden');
+    t.classList.add('anim');
+    setTimeout(() => t.classList.add('hidden'), 2500);
+}
+
+// =========================================
+// TIMER
+// =========================================
+function toggleTimer() {
+    const btn = document.getElementById('timerBtn');
+    if (timerRunning) {
+        clearInterval(timerInt);
+        timerRunning = false;
+        btn.textContent = 'INICIAR CALL';
+        btn.classList.replace('bg-red-700', 'bg-red-600');
+    } else {
+        timerSecs = 0;
+        timerRunning = true;
+        btn.textContent = 'ENCERRAR CALL';
+        btn.classList.replace('bg-red-600', 'bg-red-700');
+        timerInt = setInterval(() => {
+            timerSecs++;
+            const m = String(Math.floor(timerSecs/60)).padStart(2,'0');
+            const s = String(timerSecs%60).padStart(2,'0');
+            document.getElementById('timerDisplay').textContent = `${m}:${s}`;
+        }, 1000);
+    }
+}
+</script>
+
+</body>
+</html>
